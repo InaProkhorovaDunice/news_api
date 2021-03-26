@@ -6,11 +6,11 @@ module Api
 
       def index
         if params[:isCurrent]
-          @users = User.where(id: @current_user.id)
+          @users = @current_user
         else
           @users = User.all
         end
-        if @users
+        if @users && !params[:isCurrent]
           @users = @users.limit(@limit).offset(@offset)
         end
         render json: {status: 'SUCCESS', message: 'Loaded users', data: @users.as_json(:include => :articles)}, status: :ok
