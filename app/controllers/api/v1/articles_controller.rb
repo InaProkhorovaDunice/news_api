@@ -5,12 +5,12 @@ module Api
 
       def index
         @articles = Article.all
-        render json: {status: 'SUCCESS', message: 'Loaded articles', data: @articles}, status: :ok
+        render json: {status: 'SUCCESS', message: 'Loaded articles', data: @articles.as_json(:include => :user)}, status: :ok
       end
 
       def show
         @articles = Article.find(params[:id])
-        render json: {status: 'SUCCESS', message: 'Loaded articles', data: @articles}, status: :ok
+        render json: {status: 'SUCCESS', message: 'Loaded articles', data: @articles.as_json(:include => :user)}, status: :ok
       end
 
       def create

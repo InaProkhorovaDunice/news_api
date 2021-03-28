@@ -13,6 +13,7 @@ module Api
         if @users && !params[:isCurrent]
           @users = @users.limit(@limit).offset(@offset)
         end
+
         render json: {status: 'SUCCESS', message: 'Loaded users', data: @users.as_json(:include => :articles)}, status: :ok
       end
 
@@ -24,21 +25,16 @@ module Api
 
       def update
         @user = current_api_v1_user
-        if @article.update_attributes(article_params)
-          render json: {status: 'SUCCESS', message: 'Update article', data: @article}, status: :ok
+        if @user.update!(user_params)
+          render json: {status: 'SUCCESS', message: 'Update user', data: @user.as_json(:include => :articles)}, status: :ok
         else
-          render json: {status: 'ERROR', message: 'Article not update', data: @article}, status: :unprocessable_entity
+          render json: {status: 'ERROR', message: 'User not update', data: @user.as_json(:include => :articles)}, status: :unprocessable_entity
         end
       end
 
-      def destroy
-        current_api_v1_user.destroy
-        render json: {status: 'SUCCESS', message: 'Delete an account', data: current_api_v1_user}, status: :ok
-      end
-
       private
-      def article_params
-        params.permit(:name, :nickname, :email, :imgUrl)
+      def user_params
+        params.permit(:name, :nickname, :email)
       end
       def update_params
         @current_user = current_api_v1_user
