@@ -36,6 +36,7 @@ module Api
       def user_params
         params.permit(:name, :nickname, :email)
       end
+
       def update_params
         @current_user = current_api_v1_user
         @limit = params[:limit] ? params[:limit] : '10'
