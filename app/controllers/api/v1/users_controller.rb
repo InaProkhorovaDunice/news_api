@@ -14,21 +14,29 @@ module Api
           @users = @users.limit(@limit).offset(@offset)
         end
 
-        render json: {status: 'SUCCESS', message: 'Loaded users', data: @users.as_json(:include => :articles)}, status: :ok
+        json_response(
+            {status: 'SUCCESS', message: 'Loaded users', data: @users.as_json(:include => :articles)}
+        )
       end
 
       def show
         @user = User.find(params[:id])
 
-        render json: {status: 'SUCCESS', message: 'Loaded user', data: @user.as_json(:include => :articles)}, status: :ok
+        json_response(
+            {status: 'SUCCESS', message: 'Loaded user', data: @user.as_json(:include => :articles)}
+        )
       end
 
       def update
-        @user = current_api_v1_user
-        if @user.update!(user_params)
-          render json: {status: 'SUCCESS', message: 'Update user', data: @user.as_json(:include => :articles)}, status: :ok
+        if @current_user.update!(user_params)
+          json_response(
+              {status: 'SUCCESS', message: 'Update user', data: @current_user.as_json(:include => :articles)}
+          )
         else
-          render json: {status: 'ERROR', message: 'User not update', data: @user.as_json(:include => :articles)}, status: :unprocessable_entity
+          json_response(
+              {status: 'ERROR', message: 'User not update', data: @current_user.as_json(:include => :articles)},
+              :unprocessable_entity
+          )
         end
       end
 

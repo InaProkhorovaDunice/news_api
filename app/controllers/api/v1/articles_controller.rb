@@ -21,12 +21,7 @@ module Api
           @articles = @articles.limit(@limit).offset(@offset)
         end
 
-        render json: {status: 'SUCCESS', message: 'Loaded articles', data: @articles.as_json(:include => :user)}, status: :ok
-      end
-
-      def show
-        @articles = Article.find(params[:id])
-        render json: {status: 'SUCCESS', message: 'Loaded articles', data: @articles.as_json(:include => :user)}, status: :ok
+        json_response({status: 'SUCCESS', message: 'Loaded articles', data: @articles.as_json(:include => :user)})
       end
 
       def create
@@ -36,25 +31,10 @@ module Api
           @article.hashTags.split(',').each do |tag|
             @article.tags.create({name: tag})
           end
-          render json: {status: 'SUCCESS', message: 'Saved article', data: @article}, status: :ok
+          json_response({status: 'SUCCESS', message: 'Saved article', data: @article})
         else
-          render json: {status: 'ERROR', message: 'Article not saved', data: @article}, status: :unprocessable_entity
+          json_response({status: 'ERROR', message: 'Article not saved', data: @article}, :unprocessable_entity)
         end
-      end
-
-      def update
-        @article = Article.find(params[:id])
-        if @article.update_attributes(article_params)
-          render json: {status: 'SUCCESS', message: 'Update article', data: @article}, status: :ok
-        else
-          render json: {status: 'ERROR', message: 'Article not update', data: @article}, status: :unprocessable_entity
-        end
-      end
-
-      def destroy
-        @article = Article.find(params[:id])
-        @article.destroy
-        render json: {status: 'SUCCESS', message: 'Delete article', data: @article}, status: :ok
       end
 
       private
