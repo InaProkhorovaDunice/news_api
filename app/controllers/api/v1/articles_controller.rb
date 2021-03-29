@@ -25,8 +25,7 @@ module Api
       end
 
       def create
-        params = article_params
-        @article = current_api_v1_user.articles.new(params)
+        @article = current_api_v1_user.articles.new(article_params)
         if @article.save
           @article.hashTags.split(',').each do |tag|
             @article.tags.create({name: tag})

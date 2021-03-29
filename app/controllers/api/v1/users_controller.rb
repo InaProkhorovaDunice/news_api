@@ -42,7 +42,7 @@ module Api
 
       private
       def user_params
-        params.permit(:name, :nickname, :email)
+        params.permit(:nickname, :email)
       end
 
       def update_params
