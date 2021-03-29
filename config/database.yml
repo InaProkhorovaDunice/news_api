@@ -5,12 +5,8 @@ default: &default
   pool: 5
   port: 5432
   username: postgres
-  password: s3cr3t
+  password: 's3cr3t'
 
 development:
   <<: *default
   database: news_api_development
-
-test:
-  <<: *default
-  database: news_api_test
